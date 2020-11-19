@@ -50,11 +50,6 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
-.idea/workspace.xml
-.idea/OS_Projet.iml
-.idea/modules.xml
-.idea/misc.xml
-.idea/deployment.xml
-.idea/vcs.xml
+.idea/
 cmake-build-debug/
 CMakeLists.txt
