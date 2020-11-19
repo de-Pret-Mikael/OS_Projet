@@ -5,7 +5,7 @@
 #include <stdlib.h>
 
 int main(int argc, char** argv){
-    printf("hello World! yalllahhjhahah");
+    printf("hello World! Inchallah");
 
     return 0;
 }
