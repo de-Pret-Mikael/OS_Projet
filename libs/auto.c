@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <random.h>
+#include "randomTime.h"
 
 const int NBR_CAR = 20;
 const int ID_CAR[20] = {
@@ -45,7 +45,7 @@ car select_car(int id) {
 }
 
 void updateTime(car voiture){
-    voiture.timeS1 = my_ran
+    voiture.timeS1 = my_random();
 }
 
 int main(int argc, char **argv) {
