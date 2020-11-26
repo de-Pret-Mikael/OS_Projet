@@ -13,6 +13,7 @@ float my_random(float Fvalue,float Svalue, int seed){
     float number = minMax + numberF;
     return number;
 }
+/*
 void main() {
     int nbr = 11;
     for (int nbrTour = 0; nbrTour < 3; nbrTour++){
@@ -22,3 +23,4 @@ void main() {
         }
     }
 }
+*/

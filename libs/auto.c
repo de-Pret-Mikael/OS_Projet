@@ -45,7 +45,7 @@ car select_car(int id) {
 }
 
 void updateTime(car voiture){
-    voiture.timeS1 = my_random();
+    voiture.timeS1 = my_random(24, 45, 1);
 }
 
 int main(int argc, char **argv) {
