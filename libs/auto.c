@@ -32,14 +32,15 @@ void init() {
 }
 
 void lap(int id) {
-    struct voiture voitureSelected;
+    car voitureSelected;
     for(int i = 0; i < NBR_CAR;i++){
-        struct voiture obj = tableauVoiture[i];
+        car obj = tableauVoiture[i];
         if (obj.id == id){
             voitureSelected = obj;
             break;
         }
     }
+    printf("%d\n", voitureSelected.id);
 
 }
 
