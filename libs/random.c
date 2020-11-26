@@ -17,7 +17,7 @@ void main() {
     int nbr = 11;
     for (int nbrTour = 0; nbrTour < 3; nbrTour++){
         for (int i = 1; i < 10; i++) {
-            int seed = i + (nbr);
+            int seed = i + (nbr*nbrTour);
             printf("%f\n", my_random(25.0, 45.0, seed));
         }
     }
