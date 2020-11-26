@@ -10,10 +10,11 @@ const int NBR_CAR = 20;
 const int ID_CAR[20] = {
         44, 77, 16, 5, 33, 23, 55, 4, 3, 31, 10, 26, 11, 18, 7, 99, 20, 8, 63, 6};
 const char SECTEUR[3][2] = {"S1", "S2", "S3"};
-
+int tour = 1;
 typedef struct voiture car;
 struct voiture {
     int id;//= 0;
+    int numero;
     float timeS1;//= 0;
     float bestTimeS1;//= INFINITY;
     float timeS2;//= 0;
@@ -36,7 +37,7 @@ car select_car(int id) {
     car voitureSelected;
     for(int i = 0; i < NBR_CAR;i++){
         car obj = tableauVoiture[i];
-        if (obj.id == id){
+        if (obj.numero == id){
             voitureSelected = obj;
             break;
         }
@@ -44,12 +45,14 @@ car select_car(int id) {
     return voitureSelected;
 }
 
-void updateTime(car voiture){
-    voiture.timeS1 = my_random(24, 45, 1);
+void updateTime(){
+
 }
 
 int main(int argc, char **argv) {
     init();
+    car voiture = select_car(16);
     printf("%f\n", select_car(16).timeS1);
+    printf("%f\n", my_random(25,45,1));
     return 0;
 }
