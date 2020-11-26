@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <random.h>
 
 const int NBR_CAR = 20;
 const int ID_CAR[20] = {
@@ -31,7 +32,7 @@ void init() {
     }
 }
 
-void lap(int id) {
+car select_car(int id) {
     car voitureSelected;
     for(int i = 0; i < NBR_CAR;i++){
         car obj = tableauVoiture[i];
@@ -40,11 +41,15 @@ void lap(int id) {
             break;
         }
     }
-    printf("%d\n", voitureSelected.id);
+    return voitureSelected;
+}
 
+void updateTime(car voiture){
+    voiture.timeS1 = my_ran
 }
 
 int main(int argc, char **argv) {
     init();
-    lap(16);
+    printf("%f\n", select_car(16).timeS1);
+    return 0;
 }
