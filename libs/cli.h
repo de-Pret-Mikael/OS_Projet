@@ -3,4 +3,4 @@
 //
 
 #pragma once
-void affichage(car *voiture);
+void affichage(car *tableau, int taille);

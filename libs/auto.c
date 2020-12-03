@@ -16,7 +16,7 @@ int ID_CAR[20] = {
         44, 77, 16, 5, 33, 23, 55, 4, 3, 31, 10, 26, 11, 18, 7, 99, 20, 8, 63, 6};
 int tour = 1;
 
-void init() {
+void init(car *tableauVoiture) {
     for (int i = 0; i < NBR_CAR; i++) {
         tableauVoiture[i].numero = ID_CAR[i];
         tableauVoiture[i].bestTimeS1 = FLT_MAX;
@@ -27,19 +27,7 @@ void init() {
     }
 }
 
-car *select_car(int id) {
-    car *obj;
-    for (int i = 0; i < NBR_CAR; i++) {
-        obj = &tableauVoiture[i];
-        if (obj->numero == id) {
-            return obj;
-        }
-    }
-    return NULL;
-}
-
-
-int update_time(car* voiture) {
+void update_time(car *voiture) {
     int min = 25;
     int max = 45;
     voiture->timeS1 = randomRange(min, max);
@@ -62,12 +50,13 @@ int update_time(car* voiture) {
 }
 
 int main(int argc, char **argv) {
+    car tableauVoiture[NBR_CAR];
     srand48(time(NULL));
-    init();
-    car *voiture = select_car(44);
-    for (int i = 0; i < 5; i++) {
+    init(tableauVoiture);
+    for (int i = 0; i < NBR_CAR; i++) {
+        car *voiture = &tableauVoiture[i];
         update_time(voiture);
-        affichage(voiture);
     }
+    affichage(tableauVoiture, NBR_CAR);
     return 0;
 }
