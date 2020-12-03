@@ -2,11 +2,9 @@
 // Created by patris on 26/11/20.
 //
 #pragma once
-const int NBR_CAR = 20;
-const int ID_CAR[20] = {
-        44, 77, 16, 5, 33, 23, 55, 4, 3, 31, 10, 26, 11, 18, 7, 99, 20, 8, 63, 6};
-const char SECTEUR[3][2] = {"S1", "S2", "S3"};
-int tour = 1;
+extern int NBR_CAR;
+extern int ID_CAR[20];
+extern int tour;
 typedef struct voiture car;
 struct voiture {
     int numero;

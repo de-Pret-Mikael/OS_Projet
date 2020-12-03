@@ -9,8 +9,12 @@
 #include <float.h>
 #include "randomTime.h"
 #include "auto.h"
+#include "cli.h"
 
-
+int NBR_CAR = 20;
+int ID_CAR[20] = {
+        44, 77, 16, 5, 33, 23, 55, 4, 3, 31, 10, 26, 11, 18, 7, 99, 20, 8, 63, 6};
+int tour = 1;
 
 void init() {
     for (int i = 0; i < NBR_CAR; i++) {
@@ -35,10 +39,9 @@ car *select_car(int id) {
 }
 
 
-int update_time(int id) {
+int update_time(car* voiture) {
     int min = 25;
     int max = 45;
-    car *voiture = select_car(id);
     voiture->timeS1 = randomRange(min, max);
     if (voiture->timeS1 < voiture->bestTimeS1) {
         voiture->bestTimeS1 = voiture->timeS1;
@@ -61,13 +64,10 @@ int update_time(int id) {
 int main(int argc, char **argv) {
     srand48(time(NULL));
     init();
-    car *voiture = select_car(16);
+    car *voiture = select_car(44);
     for (int i = 0; i < 5; i++) {
-        update_time(16);
-        printf("%07.3f\n", voiture->timeS1);
-        printf("%07.3f\n", voiture->timeS2);
-        printf("%07.3f\n", voiture->timeS3);
-        printf("%07.3f\n\n", voiture->bestTourTime);
+        update_time(voiture);
+        affichage(voiture);
     }
     return 0;
 }
