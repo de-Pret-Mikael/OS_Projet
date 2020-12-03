@@ -55,6 +55,5 @@ int main(int argc, char **argv) {
     init();
     car voiture = select_car(16);
     printf("%f\n", select_car(16).timeS1);
-    printf("%f\n", ;
     return 0;
 }
