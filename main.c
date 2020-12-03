@@ -5,5 +5,5 @@
 #include "auto.h"
 
 int main(int argc, char** argv){
-
+    srand48(69);
 }

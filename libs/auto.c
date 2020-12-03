@@ -45,14 +45,17 @@ car select_car(int id) {
     return voitureSelected;
 }
 
-void updateTime(){
 
+
+void updateTime(int id){
+    int index = tableauVoiture.IndexOf(select_car(id));
+    return index;
 }
 
 int main(int argc, char **argv) {
     init();
     car voiture = select_car(16);
     printf("%f\n", select_car(16).timeS1);
-    printf("%f\n", my_random(25,45,1));
+    printf("%f\n", ;
     return 0;
 }
