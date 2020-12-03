@@ -13,7 +13,6 @@ const char SECTEUR[3][2] = {"S1", "S2", "S3"};
 int tour = 1;
 typedef struct voiture car;
 struct voiture {
-    int id;//= 0;
     int numero;
     float timeS1;//= 0;
     float bestTimeS1;//= INFINITY;
