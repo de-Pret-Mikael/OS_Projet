@@ -1,8 +1,8 @@
 //
 // Created by patris on 26/11/20.
 //
-#include "randomTime.h"
-#include "auto.h"
+#include "libs/randomTime.h"
+#include "libs/auto.h"
 
 int main(int argc, char** argv){
     srand48(69);

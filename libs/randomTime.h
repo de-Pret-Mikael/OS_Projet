@@ -4,5 +4,5 @@
 
 #ifndef OS_PROJET_RANDOM_H
 #define OS_PROJET_RANDOM_H
-float my_random(float Fvalue,float Svalue, int seed);
+double randomRange(double min, double max);
 #endif //OS_PROJET_RANDOM_H

@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "randomTime.h"
+#include <unistd.h>
+#include <time.h>
 
 const int NBR_CAR = 20;
 const int ID_CAR[20] = {
@@ -25,35 +27,42 @@ struct voiture {
     char out;//"F";
 } tableauVoiture[20];
 
+
 void init() {
     for (int i = 0; i < NBR_CAR; i++) {
-        car obj = {ID_CAR[i], 0, 0, 0, 0, 0, 0, 0, 0, 0};
-        tableauVoiture[i] = obj;
+        tableauVoiture[i].numero = ID_CAR[i];
     }
 }
 
-car select_car(int id) {
-    car voitureSelected;
+car* select_car(int id) {
+    car *obj;
     for(int i = 0; i < NBR_CAR;i++){
-        car obj = tableauVoiture[i];
-        if (obj.numero == id){
-            voitureSelected = obj;
-            break;
+        obj = &tableauVoiture[i];
+        if (obj->numero == id){
+            return obj;
         }
     }
-    return voitureSelected;
+    return NULL;
 }
 
 
 
-void updateTime(int id){
-    int index = tableauVoiture.IndexOf(select_car(id));
-    return index;
+int update_time(int id){
+    int min = 25;
+    int max = 45;
+    car* voiture = select_car(id);
+    voiture->timeS1 = randomRange(min,max);
+    voiture->timeS2 = randomRange(min,max);
+    voiture->timeS3 = randomRange(min,max);
 }
 
 int main(int argc, char **argv) {
+    srand48(time(NULL));
     init();
-    car voiture = select_car(16);
-    printf("%f\n", select_car(16).timeS1);
+    car* voiture = select_car(16);
+    update_time(16);
+    printf("%f\n", voiture->timeS1);
+    printf("%f\n", voiture->timeS2);
+    printf("%f\n", voiture->timeS3);
     return 0;
 }
