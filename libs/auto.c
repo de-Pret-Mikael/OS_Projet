@@ -7,9 +7,11 @@
 #include <unistd.h>
 #include <time.h>
 #include <float.h>
+#include <wait.h>
 #include "randomTime.h"
 #include "auto.h"
 #include "cli.h"
+#include "fork.h"
 
 int NBR_CAR = 20;
 int ID_CAR[20] = {
@@ -145,17 +147,22 @@ int main(int argc, char **argv) {
     init(tableauVoiture);
     printf("Meilleur temps S1\n");
     srand48(time(NULL));
-    for (int i = 0; i < 3; i++) {
-        for (int i = 0; i < NBR_CAR; i++) {
-            car *voiture = &tableauVoiture[i];
-            update_time(voiture);
-        }
+    for (int i = 0; i < NBR_CAR; i++) {
+        car *voiture = &tableauVoiture[i];
+        creatFork(voiture);
+    }
+    while (1){
+        int status;
+        pid_t result = waitpid(-1, &status, WNOHANG);
         tri_S1(tableauVoiture);
         tri_S2(tableauVoiture);
         tri_S3(tableauVoiture);
         tri_tour_temps(tableauVoitureTri, tableauVoiture);
         diff_tot_time(tableauVoitureTri);
         affichage(tableauVoitureTri, NBR_CAR);
+        if (result > 0){
+            break;
+        }
         sleep(1);
     }
     return 0;

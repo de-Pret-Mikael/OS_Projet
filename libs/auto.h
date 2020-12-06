@@ -5,6 +5,7 @@
 typedef struct voiture car;
 struct voiture {
     int numero;
+    int finish;
     float timeS1;//= 0;
     float bestTimeS1;//= INFINITY;
     int posS1;
@@ -21,3 +22,5 @@ struct voiture {
     char stand;//"F";
     char out;//"F";
 };
+
+void update_time(car *voiture);
