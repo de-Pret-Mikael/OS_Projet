@@ -18,7 +18,6 @@ int tour = 1;
 float minTemps;
 float bestTimeS1;
 car typeTri;
-car emplacement_temporaire;
 
 
 void init(car *tableauVoiture) {
@@ -54,26 +53,30 @@ void update_time(car *voiture) {
     voiture->totalTime += voiture->tourTime;
 }
 
-void tri_tour_temps(car *tableauVoiture) {
+
+void tri_tour_temps(car **tableTri,car *table){
+    for (int i = 0; i < NBR_CAR;i++){
+        tableTri[i] = &table[i];
+    }
     for (int i = 0; i < NBR_CAR; i++) {
         for (int j = 0; j < NBR_CAR; j++) {
-            if (tableauVoiture[j].bestTourTime > tableauVoiture[i].bestTourTime) {
-                emplacement_temporaire = tableauVoiture[i];
-                tableauVoiture[i] = tableauVoiture[j];
-                tableauVoiture[j] = emplacement_temporaire;
+            if (tableTri[j]->bestTourTime > tableTri[i]->bestTourTime) {
+                car* emplacement_temporaire = tableTri[i];
+                tableTri[i] = tableTri[j];
+                tableTri[j] = emplacement_temporaire;
             }
         }
     }
 }
 
-void diff_tot_time(car *tableauVoiture){
+void diff_tot_time(car **tableauVoiture){
     float gap;
     for (int i = 0; i < NBR_CAR; i++) {
         if (i != 0) {
-        gap = tableauVoiture[i].bestTourTime - tableauVoiture[i-1].bestTourTime;
-        tableauVoiture[i].gap = gap;
+        gap = tableauVoiture[i]->bestTourTime - tableauVoiture[i-1]->bestTourTime;
+        tableauVoiture[i]->gap = gap;
         } else {
-            tableauVoiture[i].gap = 0.0;
+            tableauVoiture[i]->gap = 0.0;
         }
     }
 }
@@ -81,6 +84,7 @@ void diff_tot_time(car *tableauVoiture){
 
 int main(int argc, char **argv) {
     car tableauVoiture[NBR_CAR];
+    car* tableauVoitureTri[NBR_CAR];
     srand48(time(NULL));
     init(tableauVoiture);
     for (int i = 0; i < NBR_CAR; i++) {
@@ -94,9 +98,9 @@ int main(int argc, char **argv) {
 //    }
 //    affichage(tableauVoiture, NBR_CAR);
     printf("Meilleur temps S1\n");
-    tri_tour_temps(tableauVoiture);
-    diff_tot_time(tableauVoiture);
-    affichage(tableauVoiture, NBR_CAR);
+    tri_tour_temps(tableauVoitureTri,tableauVoiture);
+    diff_tot_time(tableauVoitureTri);
+    affichage(tableauVoitureTri, NBR_CAR);
 //    for (int i=0; i < NBR_CAR; i++) {
 //        printf("%f\n", tableauVoiture[i].bestTimeS1);
 //    }
