@@ -14,6 +14,7 @@ struct voiture {
     float tourTime;//= timeS1 + timeS2 + timeS3;
     float bestTourTime;
     float totalTime;
+    float gap;
     char stand;//"F";
     char out;//"F";
 };
