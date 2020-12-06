@@ -54,14 +54,14 @@ void update_time(car *voiture) {
 }
 
 
-void tri_tour_temps(car **tableTri,car *table){
-    for (int i = 0; i < NBR_CAR;i++){
+void tri_tour_temps(car **tableTri, car *table) {
+    for (int i = 0; i < NBR_CAR; i++) {
         tableTri[i] = &table[i];
     }
     for (int i = 0; i < NBR_CAR; i++) {
         for (int j = 0; j < NBR_CAR; j++) {
             if (tableTri[j]->bestTourTime > tableTri[i]->bestTourTime) {
-                car* emplacement_temporaire = tableTri[i];
+                car *emplacement_temporaire = tableTri[i];
                 tableTri[i] = tableTri[j];
                 tableTri[j] = emplacement_temporaire;
             }
@@ -69,12 +69,69 @@ void tri_tour_temps(car **tableTri,car *table){
     }
 }
 
-void diff_tot_time(car **tableauVoiture){
+void tri_S1(car *table) {
+    car *tableTri[NBR_CAR];
+    for (int i = 0; i < NBR_CAR; i++) {
+        tableTri[i] = &table[i];
+    }
+    for (int i = 0; i < NBR_CAR; i++) {
+        for (int j = 0; j < NBR_CAR; j++) {
+            if (tableTri[j]->timeS1 > tableTri[i]->timeS1) {
+                car *emplacement_temporaire = tableTri[i];
+                tableTri[i] = tableTri[j];
+                tableTri[j] = emplacement_temporaire;
+            }
+        }
+    }
+    for (int i = 0; i < NBR_CAR; i++) {
+        tableTri[i]->posS1 = i;
+    }
+}
+
+void tri_S2(car *table) {
+    car *tableTri[NBR_CAR];
+    for (int i = 0; i < NBR_CAR; i++) {
+        tableTri[i] = &table[i];
+    }
+    for (int i = 0; i < NBR_CAR; i++) {
+        for (int j = 0; j < NBR_CAR; j++) {
+            if (tableTri[j]->timeS2 > tableTri[i]->timeS2) {
+                car *emplacement_temporaire = tableTri[i];
+                tableTri[i] = tableTri[j];
+                tableTri[j] = emplacement_temporaire;
+            }
+        }
+    }
+    for (int i = 0; i < NBR_CAR; i++) {
+        tableTri[i]->posS2 = i;
+    }
+}
+
+void tri_S3(car *table) {
+    car *tableTri[NBR_CAR];
+    for (int i = 0; i < NBR_CAR; i++) {
+        tableTri[i] = &table[i];
+    }
+    for (int i = 0; i < NBR_CAR; i++) {
+        for (int j = 0; j < NBR_CAR; j++) {
+            if (tableTri[j]->timeS3 > tableTri[i]->timeS3) {
+                car *emplacement_temporaire = tableTri[i];
+                tableTri[i] = tableTri[j];
+                tableTri[j] = emplacement_temporaire;
+            }
+        }
+    }
+    for (int i = 0; i < NBR_CAR; i++) {
+        tableTri[i]->posS3 = i;
+    }
+}
+
+void diff_tot_time(car **tableauVoiture) {
     float gap;
     for (int i = 0; i < NBR_CAR; i++) {
         if (i != 0) {
-        gap = tableauVoiture[i]->bestTourTime - tableauVoiture[i-1]->bestTourTime;
-        tableauVoiture[i]->gap = gap;
+            gap = tableauVoiture[i]->bestTourTime - tableauVoiture[i - 1]->bestTourTime;
+            tableauVoiture[i]->gap = gap;
         } else {
             tableauVoiture[i]->gap = 0.0;
         }
@@ -84,33 +141,22 @@ void diff_tot_time(car **tableauVoiture){
 
 int main(int argc, char **argv) {
     car tableauVoiture[NBR_CAR];
-    car* tableauVoitureTri[NBR_CAR];
-    srand48(time(NULL));
+    car *tableauVoitureTri[NBR_CAR];
     init(tableauVoiture);
-    for (int i = 0; i < NBR_CAR; i++) {
-        car *voiture = &tableauVoiture[i];
-        update_time(voiture);
-    }
-//    for (int i = 0; i < NBR_CAR; i++) {
-//        if (tableauVoiture[i].bestTimeS1 < minTemps){
-//            minTemps = tableauVoiture[i].bestTimeS1;
-//        }
-//    }
-//    affichage(tableauVoiture, NBR_CAR);
     printf("Meilleur temps S1\n");
-    tri_tour_temps(tableauVoitureTri,tableauVoiture);
-    diff_tot_time(tableauVoitureTri);
-    affichage(tableauVoitureTri, NBR_CAR);
-//    for (int i=0; i < NBR_CAR; i++) {
-//        printf("%f\n", tableauVoiture[i].bestTimeS1);
-//    }
-
-//
-//
-//    printf("LE MAX EST LE SUIVANT : %f\n", minTemps);
-//    }
-
-
-
+    srand48(time(NULL));
+    for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < NBR_CAR; i++) {
+            car *voiture = &tableauVoiture[i];
+            update_time(voiture);
+        }
+        tri_S1(tableauVoiture);
+        tri_S2(tableauVoiture);
+        tri_S3(tableauVoiture);
+        tri_tour_temps(tableauVoitureTri, tableauVoiture);
+        diff_tot_time(tableauVoitureTri);
+        affichage(tableauVoitureTri, NBR_CAR);
+        sleep(1);
+    }
     return 0;
 }

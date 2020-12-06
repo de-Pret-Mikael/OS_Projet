@@ -7,10 +7,13 @@ struct voiture {
     int numero;
     float timeS1;//= 0;
     float bestTimeS1;//= INFINITY;
+    int posS1;
     float timeS2;//= 0;
     float bestTimeS2;//= INFINITY;
+    int posS2;
     float timeS3;//= 0;
     float bestTimeS3;//= INFINITY;
+    int posS3;
     float tourTime;//= timeS1 + timeS2 + timeS3;
     float bestTourTime;
     float totalTime;

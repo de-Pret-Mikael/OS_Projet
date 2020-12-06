@@ -12,12 +12,17 @@ void affichage(car **tableau, int taille) {
     for (int i = 0; i < taille; i++) {
         car* voiture = tableau[i];
         int numero = voiture->numero;
+        printf("   %2d    ",numero);
         float S1 = voiture->timeS1;
+        printf("%8.3f",S1);
         float S2 = voiture->timeS2;
+        printf(" %8.3f",S2);
         float S3 = voiture->timeS3;
+        printf(" %8.3f",S3);
         float bestTourTime = voiture->bestTourTime;
+        printf(" %9.3f",bestTourTime);
         float gap = voiture->gap;
-        printf("   %2d    %8.3f %8.3f %8.3f %9.3f %+8.3f\n", numero, S1, S2, S3, bestTourTime, gap);
+        printf(" %+8.3f\n",gap);
     }
 }
 
