@@ -24,6 +24,7 @@ void couleur(char pos){
 
 //voiture   S1   S2   S3   tour   gap   stands
 void affichage(car **tableau, int taille) {
+    system("clear");
     printf("%2s %6s %8s %8s %9s %8s %8s\n", "vehicule", "S1", "S2", "S3", "tour", "gap", "stands");
     for (int i = 0; i < taille; i++) {
         car* voiture = tableau[i];

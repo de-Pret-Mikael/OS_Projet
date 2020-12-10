@@ -12,6 +12,7 @@
 #include "auto.h"
 #include "cli.h"
 #include "fork.h"
+#include "mem.h"
 
 int NBR_CAR = 20;
 int ID_CAR[20] = {
@@ -21,17 +22,6 @@ float minTemps;
 float bestTimeS1;
 car typeTri;
 
-
-void init(car *tableauVoiture) {
-    for (int i = 0; i < NBR_CAR; i++) {
-        tableauVoiture[i].numero = ID_CAR[i];
-        tableauVoiture[i].bestTimeS1 = FLT_MAX;
-        tableauVoiture[i].bestTimeS2 = FLT_MAX;
-        tableauVoiture[i].bestTimeS3 = FLT_MAX;
-        tableauVoiture[i].bestTourTime = FLT_MAX;
-        tableauVoiture[i].totalTime = 0;
-    }
-}
 
 void update_time(car *voiture) {
     int min = 25;
@@ -140,19 +130,47 @@ void diff_tot_time(car **tableauVoiture) {
     }
 }
 
+int initVoiture(SharedInfo shared) {
+    car *voiture = getAllVoitures(shared);
+    if (!voiture) {
+        return 0;
+    }
+
+    for (int i = 0; i < NBR_CAR; i++) {
+        voiture[i].numero = ID_CAR[i];
+        voiture[i].bestTimeS1 = FLT_MAX;
+        voiture[i].bestTimeS2 = FLT_MAX;
+        voiture[i].bestTimeS3 = FLT_MAX;
+        voiture[i].bestTourTime = FLT_MAX;
+        voiture[i].totalTime = 0;
+    }
+    if (!detVoiture(voiture, 0)) {
+        return 0;
+    }
+    return 1;
+}
+
 
 int main(int argc, char **argv) {
-    car tableauVoiture[NBR_CAR];
-    car *tableauVoitureTri[NBR_CAR];
-    init(tableauVoiture);
     printf("Meilleur temps S1\n");
-    srand48(time(NULL));
-    for (int i = 0; i < NBR_CAR; i++) {
-        car *voiture = &tableauVoiture[i];
-        creatFork(voiture);
+    SharedInfo shared;
+    if (!memShare(&shared)) {
+        return -1;
     }
-    while (1){
+    if (!initVoiture(shared)) {
+        return -1;
+    }
+
+    for (int i = 0; i < NBR_CAR; i++) {
+        creatFork(shared, i);
+    }
+    while (1) {
         int status;
+        car tableauVoiture[NBR_CAR];
+        car* tableauVoitureTri[NBR_CAR];
+        if (!getAllVoitureCopy(shared, tableauVoiture)) {
+            return 0;
+        }
         pid_t result = waitpid(-1, &status, WNOHANG);
         tri_S1(tableauVoiture);
         tri_S2(tableauVoiture);
@@ -160,7 +178,7 @@ int main(int argc, char **argv) {
         tri_tour_temps(tableauVoitureTri, tableauVoiture);
         diff_tot_time(tableauVoitureTri);
         affichage(tableauVoitureTri, NBR_CAR);
-        if (result > 0){
+        if (result > 0) {
             break;
         }
         sleep(1);
