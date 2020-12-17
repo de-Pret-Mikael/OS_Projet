@@ -14,20 +14,24 @@
 #include "cli.h"
 #include "mem.h"
 
-int creatFork(SharedInfo shared, int index) {
+void creatFork(SharedInfo shared, int index, int maxTime) {
     pid_t PID = fork();
     if (PID == 0) {//enfant
         srand48(time(NULL) + getpid());
         car voiture;
         if (!getVoitureCopy(shared, index, &voiture)) {
-            return 0;
+            exit(0);
         }
-        for (int i = 0; i < 3; i++) {
+        while (voiture.totalTime< maxTime) {
             update_time(&voiture);
             if (!setVoiture(shared, index, &voiture)) {
-                return 0;
+                exit(0);
             }
             sleep(1);
+        }
+        voiture.finish = 1;
+        if (!setVoiture(shared, index, &voiture)) {
+            exit(0);
         }
 
         exit(0);

@@ -143,6 +143,7 @@ int initVoiture(SharedInfo shared) {
         voiture[i].bestTimeS3 = FLT_MAX;
         voiture[i].bestTourTime = FLT_MAX;
         voiture[i].totalTime = 0;
+        voiture[i].finish = 0;
     }
     if (!detVoiture(voiture, 0)) {
         return 0;
@@ -150,38 +151,51 @@ int initVoiture(SharedInfo shared) {
     return 1;
 }
 
-
-int main(int argc, char **argv) {
-    printf("Meilleur temps S1\n");
-    SharedInfo shared;
-    if (!memShare(&shared)) {
-        return -1;
+int forkFini(car *voiture){
+    for(int i =0;i<NBR_CAR;i++){
+        if (! voiture[i].finish){
+            return 0;
+        }
     }
+    return 1;
+}
+
+
+int lancerEssai(SharedInfo shared, int maxTime, char *title) {
     if (!initVoiture(shared)) {
         return -1;
     }
-
     for (int i = 0; i < NBR_CAR; i++) {
-        creatFork(shared, i);
+        creatFork(shared, i, maxTime);
     }
     while (1) {
         int status;
         car tableauVoiture[NBR_CAR];
-        car* tableauVoitureTri[NBR_CAR];
+        car *tableauVoitureTri[NBR_CAR];
         if (!getAllVoitureCopy(shared, tableauVoiture)) {
             return 0;
         }
-        pid_t result = waitpid(-1, &status, WNOHANG);
         tri_S1(tableauVoiture);
         tri_S2(tableauVoiture);
         tri_S3(tableauVoiture);
         tri_tour_temps(tableauVoitureTri, tableauVoiture);
         diff_tot_time(tableauVoitureTri);
-        affichage(tableauVoitureTri, NBR_CAR);
-        if (result > 0) {
+        affichage(tableauVoitureTri, NBR_CAR, title);
+        if (forkFini(tableauVoiture)) {
             break;
         }
         sleep(1);
     }
     return 0;
+}
+
+int main(int argc, char **argv) {
+    SharedInfo shared;
+    if (!memShare(&shared)) {
+        return -1;
+    }
+    lancerEssai(shared, 5400, "P1");
+    lancerEssai(shared, 5400, "P2");
+    //lancerEssai(shared, 3600, "P3");
+    delAllVoiture(&shared);
 }

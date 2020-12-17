@@ -4,4 +4,4 @@
 #pragma once
 #include "auto.h"
 #include "mem.h"
-int creatFork(SharedInfo shared, int index);
+void creatFork(SharedInfo shared, int index, int maxTime);

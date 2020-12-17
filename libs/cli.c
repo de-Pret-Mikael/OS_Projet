@@ -7,7 +7,7 @@
 #include "cli.h"
 
 
-void couleur(char pos){
+void couleur(char pos) {
     switch (pos) {
         case 0:
             printf("\e[38;5;207m\e[48;5;226m");
@@ -23,29 +23,30 @@ void couleur(char pos){
 }
 
 //voiture   S1   S2   S3   tour   gap   stands
-void affichage(car **tableau, int taille) {
+void affichage(car **tableau, int taille, char *title) {
     system("clear");
+    printf("%s\n\n", title);
     printf("%2s %6s %8s %8s %9s %8s %8s\n", "vehicule", "S1", "S2", "S3", "tour", "gap", "stands");
     for (int i = 0; i < taille; i++) {
-        car* voiture = tableau[i];
+        car *voiture = tableau[i];
         int numero = voiture->numero;
-        printf("   %2d    ",numero);
+        printf("   %2d    ", numero);
         float S1 = voiture->timeS1;
         couleur(voiture->posS1);
-        printf("%8.3f",S1);
+        printf("%8.3f", S1);
         printf("\e[0m");
         float S2 = voiture->timeS2;
         couleur(voiture->posS2);
-        printf(" %8.3f",S2);
+        printf(" %8.3f", S2);
         printf("\e[0m");
         float S3 = voiture->timeS3;
         couleur(voiture->posS3);
-        printf(" %8.3f",S3);
+        printf(" %8.3f", S3);
         printf("\e[0m");
         float bestTourTime = voiture->bestTourTime;
-        printf(" %9.3f",bestTourTime);
+        printf(" %9.3f", bestTourTime);
         float gap = voiture->gap;
-        printf(" %+8.3f\e[0m\n",gap);
+        printf(" %+8.3f\e[0m\n", gap);
     }
     couleur(0);
     printf("1er   ");
