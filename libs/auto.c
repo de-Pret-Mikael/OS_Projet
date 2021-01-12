@@ -46,14 +46,15 @@ void update_time(car *voiture) {
 }
 
 
-void tri_tour_temps(car **tableTri, car *table) {
-    for (int i = 0; i < NBR_CAR; i++) {
-        tableTri[i] = &table[i];
+void tri_tour_temps(car *tableTri, car *table, int nbrCar) {
+    for (int i = 0; i < nbrCar; i++) {
+        int index = tableTri[i].index;
+        tableTri[i] = table[index];
     }
-    for (int i = 0; i < NBR_CAR; i++) {
-        for (int j = 0; j < NBR_CAR; j++) {
-            if (tableTri[j]->bestTourTime > tableTri[i]->bestTourTime) {
-                car *emplacement_temporaire = tableTri[i];
+    for (int i = 0; i < nbrCar; i++) {
+        for (int j = 0; j < nbrCar; j++) {
+            if (tableTri[j].bestTourTime > tableTri[i].bestTourTime) {
+                car emplacement_temporaire = tableTri[i];
                 tableTri[i] = tableTri[j];
                 tableTri[j] = emplacement_temporaire;
             }
@@ -61,13 +62,14 @@ void tri_tour_temps(car **tableTri, car *table) {
     }
 }
 
-void tri_S1(car *table) {
+void tri_S1(car *table, car *tableTriAll, int nbrCar) {
     car *tableTri[NBR_CAR];
     for (int i = 0; i < NBR_CAR; i++) {
-        tableTri[i] = &table[i];
+        int index = tableTriAll[i].index;
+        tableTri[i] = &table[index];
     }
-    for (int i = 0; i < NBR_CAR; i++) {
-        for (int j = 0; j < NBR_CAR; j++) {
+    for (int i = 0; i < nbrCar; i++) {
+        for (int j = 0; j < nbrCar; j++) {
             if (tableTri[j]->timeS1 > tableTri[i]->timeS1) {
                 car *emplacement_temporaire = tableTri[i];
                 tableTri[i] = tableTri[j];
@@ -75,18 +77,19 @@ void tri_S1(car *table) {
             }
         }
     }
-    for (int i = 0; i < NBR_CAR; i++) {
+    for (int i = 0; i < nbrCar; i++) {
         tableTri[i]->posS1 = i;
     }
 }
 
-void tri_S2(car *table) {
+void tri_S2(car *table, car *tableTriAll, int nbrCar) {
     car *tableTri[NBR_CAR];
     for (int i = 0; i < NBR_CAR; i++) {
-        tableTri[i] = &table[i];
+        int index = tableTriAll[i].index;
+        tableTri[i] = &table[index];
     }
-    for (int i = 0; i < NBR_CAR; i++) {
-        for (int j = 0; j < NBR_CAR; j++) {
+    for (int i = 0; i < nbrCar; i++) {
+        for (int j = 0; j < nbrCar; j++) {
             if (tableTri[j]->timeS2 > tableTri[i]->timeS2) {
                 car *emplacement_temporaire = tableTri[i];
                 tableTri[i] = tableTri[j];
@@ -94,18 +97,19 @@ void tri_S2(car *table) {
             }
         }
     }
-    for (int i = 0; i < NBR_CAR; i++) {
+    for (int i = 0; i < nbrCar; i++) {
         tableTri[i]->posS2 = i;
     }
 }
 
-void tri_S3(car *table) {
+void tri_S3(car *table, car *tableTriAll, int nbrCar) {
     car *tableTri[NBR_CAR];
     for (int i = 0; i < NBR_CAR; i++) {
-        tableTri[i] = &table[i];
+        int index = tableTriAll[i].index;
+        tableTri[i] = &table[index];
     }
-    for (int i = 0; i < NBR_CAR; i++) {
-        for (int j = 0; j < NBR_CAR; j++) {
+    for (int i = 0; i < nbrCar; i++) {
+        for (int j = 0; j < nbrCar; j++) {
             if (tableTri[j]->timeS3 > tableTri[i]->timeS3) {
                 car *emplacement_temporaire = tableTri[i];
                 tableTri[i] = tableTri[j];
@@ -113,19 +117,19 @@ void tri_S3(car *table) {
             }
         }
     }
-    for (int i = 0; i < NBR_CAR; i++) {
+    for (int i = 0; i < nbrCar; i++) {
         tableTri[i]->posS3 = i;
     }
 }
 
-void diff_tot_time(car **tableauVoiture) {
+void diff_tot_time(car *tableauVoiture) {
     float gap;
     for (int i = 0; i < NBR_CAR; i++) {
         if (i != 0) {
-            gap = tableauVoiture[i]->bestTourTime - tableauVoiture[i - 1]->bestTourTime;
-            tableauVoiture[i]->gap = gap;
+            gap = tableauVoiture[i].bestTourTime - tableauVoiture[i - 1].bestTourTime;
+            tableauVoiture[i].gap = gap;
         } else {
-            tableauVoiture[i]->gap = 0.0;
+            tableauVoiture[i].gap = 0.0;
         }
     }
 }
@@ -138,12 +142,35 @@ int initVoiture(SharedInfo shared) {
 
     for (int i = 0; i < NBR_CAR; i++) {
         voiture[i].numero = ID_CAR[i];
+        voiture[i].index = i;
         voiture[i].bestTimeS1 = FLT_MAX;
         voiture[i].bestTimeS2 = FLT_MAX;
         voiture[i].bestTimeS3 = FLT_MAX;
         voiture[i].bestTourTime = FLT_MAX;
         voiture[i].totalTime = 0;
         voiture[i].finish = 0;
+        voiture[i].nbrTour = 0;
+    }
+    if (!detVoiture(voiture, 0)) {
+        return 0;
+    }
+    return 1;
+}
+
+int resetVoiture(SharedInfo shared, int nbrCar, car *tableTri){
+    car *voiture = getAllVoitures(shared);
+    if (!voiture) {
+        return 0;
+    }
+
+    for (int i = 0; i < nbrCar; i++) {
+        int index = tableTri[i].index;
+        voiture[index].bestTimeS1 = FLT_MAX;
+        voiture[index].bestTimeS2 = FLT_MAX;
+        voiture[index].bestTimeS3 = FLT_MAX;
+        voiture[index].bestTourTime = FLT_MAX;
+        voiture[index].totalTime = 0;
+        voiture[index].finish = 0;
     }
     if (!detVoiture(voiture, 0)) {
         return 0;
@@ -161,26 +188,25 @@ int forkFini(car *voiture){
 }
 
 
-int lancerEssai(SharedInfo shared, int maxTime, char *title) {
-    if (!initVoiture(shared)) {
+int lancerEssai(SharedInfo shared, car *tableTri, int nbrCar, int maxTime, char *title) {
+    if (!resetVoiture(shared, nbrCar, tableTri)) {
         return -1;
     }
-    for (int i = 0; i < NBR_CAR; i++) {
-        creatFork(shared, i, maxTime);
+    for (int i = 0; i < nbrCar; i++) {
+        creatFork(shared, tableTri[i].index, maxTime);
     }
     while (1) {
         int status;
         car tableauVoiture[NBR_CAR];
-        car *tableauVoitureTri[NBR_CAR];
         if (!getAllVoitureCopy(shared, tableauVoiture)) {
             return 0;
         }
-        tri_S1(tableauVoiture);
-        tri_S2(tableauVoiture);
-        tri_S3(tableauVoiture);
-        tri_tour_temps(tableauVoitureTri, tableauVoiture);
-        diff_tot_time(tableauVoitureTri);
-        affichage(tableauVoitureTri, NBR_CAR, title);
+        tri_S1(tableauVoiture, tableTri, nbrCar);
+        tri_S2(tableauVoiture, tableTri, nbrCar);
+        tri_S3(tableauVoiture, tableTri, nbrCar);
+        tri_tour_temps(tableTri, tableauVoiture, nbrCar);
+        diff_tot_time(tableTri);
+        affichage(tableTri, NBR_CAR, title, nbrCar);
         if (forkFini(tableauVoiture)) {
             break;
         }
@@ -189,13 +215,33 @@ int lancerEssai(SharedInfo shared, int maxTime, char *title) {
     return 0;
 }
 
+int lancerFinal(SharedInfo shared, car *tableTri, int nbrCar, int maxTime, char *title){
+    if (!resetVoiture(shared, nbrCar, tableTri)) {
+        return -1;
+    }
+    for (int i = 0; i < nbrCar; i++) {
+        creatFork(shared, tableTri[i].index, maxTime);
+    }
+}
+
+
 int main(int argc, char **argv) {
     SharedInfo shared;
+    car tableVoitureTri[NBR_CAR];
     if (!memShare(&shared)) {
         return -1;
     }
-    lancerEssai(shared, 5400, "P1");
-    lancerEssai(shared, 5400, "P2");
-    //lancerEssai(shared, 3600, "P3");
+    if (!initVoiture(shared)) {
+        return -1;
+    }
+    if (!getAllVoitureCopy(shared, tableVoitureTri)) {
+        return 0;
+    }
+    lancerEssai(shared, tableVoitureTri, NBR_CAR, 360, "P1");
+    lancerEssai(shared, tableVoitureTri, NBR_CAR, 360, "P2");
+    lancerEssai(shared, tableVoitureTri, NBR_CAR, 360, "P3");
+    lancerEssai(shared, tableVoitureTri, NBR_CAR, 360, "Q1");
+    lancerEssai(shared, tableVoitureTri, 15, 360, "Q2");
+    lancerEssai(shared, tableVoitureTri, 10, 360, "Q3");
     delAllVoiture(&shared);
 }

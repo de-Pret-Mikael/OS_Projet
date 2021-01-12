@@ -5,7 +5,9 @@
 typedef struct voiture car;
 struct voiture {
     int numero;
+    int index;
     int finish;
+    int nbrTour;
     float timeS1;//= 0;
     float bestTimeS1;//= INFINITY;
     int posS1;

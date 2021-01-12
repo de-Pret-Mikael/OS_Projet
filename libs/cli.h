@@ -3,4 +3,4 @@
 //
 
 #pragma once
-void affichage(car **tableau, int taille, char *title);
+void affichage(car *tableau, int taille, char *title, int nbrCar);
