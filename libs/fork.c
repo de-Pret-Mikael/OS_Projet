@@ -28,6 +28,39 @@ void creatFork(SharedInfo shared, int index, int maxTime) {
                 exit(0);
             }
             sleep(1);
+            voiture.stand = 0;
+            if (!setVoiture(shared, index, &voiture)) {
+                exit(0);
+            }
+        }
+        voiture.finish = 1;
+        if (!setVoiture(shared, index, &voiture)) {
+            exit(0);
+        }
+
+        exit(0);
+    }
+}
+
+void finaleFork(SharedInfo shared, int index, int maxTour) {
+    pid_t PID = fork();
+    if (PID == 0) {
+        srand48(time(NULL) + getpid());
+        car voiture;
+        if(!getVoitureCopy(shared, index, &voiture)) {
+            exit(0);
+        }
+        while (voiture.nbrTour < maxTour) {
+            update_time(&voiture);
+            voiture.nbrTour += 1;
+            if (!setVoiture(shared, index, &voiture)) {
+                exit(0);
+            }
+            sleep(1);
+            voiture.stand = 0;
+            if (!setVoiture(shared, index, &voiture)) {
+                exit(0);
+            }
         }
         voiture.finish = 1;
         if (!setVoiture(shared, index, &voiture)) {

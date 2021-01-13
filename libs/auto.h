@@ -19,6 +19,7 @@ struct voiture {
     int posS3;
     float tourTime;//= timeS1 + timeS2 + timeS3;
     float bestTourTime;
+    int posTour;
     float totalTime;
     float gap;
     char stand;//"F";
