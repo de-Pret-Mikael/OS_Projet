@@ -332,9 +332,9 @@ int main(int argc, char **argv) {
     if (!getAllVoitureCopy(shared, tableVoitureTri)) {
         return 0;
     }
-    //lancerEssai(shared, tableVoitureTri, NBR_CAR, 360, "P1");
-    //lancerEssai(shared, tableVoitureTri, NBR_CAR, 360, "P2");
-    //lancerEssai(shared, tableVoitureTri, NBR_CAR, 360, "P3");
+    lancerEssai(shared, tableVoitureTri, NBR_CAR, 360, "P1");
+    lancerEssai(shared, tableVoitureTri, NBR_CAR, 360, "P2");
+    lancerEssai(shared, tableVoitureTri, NBR_CAR, 360, "P3");
     lancerEssai(shared, tableVoitureTri, NBR_CAR, 360, "Q1");
     lancerEssai(shared, tableVoitureTri, 15, 360, "Q2");
     lancerEssai(shared, tableVoitureTri, 10, 360, "Q3");
