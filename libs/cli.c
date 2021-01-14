@@ -52,7 +52,7 @@ void affichage(car *tableau, int taille, char *title, int nbrCar) {
     for (int i = 0; i < taille; i++) {
         int actif = (i<nbrCar);
         car *voiture = &tableau[i];
-        if (!actif){
+        if (!actif || voiture->out){
             printf("\e[38;5;0m\e[48;5;254m");
             printf("   %2d   ", voiture->numero);
             printf(" %8.3f", voiture->timeS1);
@@ -62,40 +62,39 @@ void affichage(car *tableau, int taille, char *title, int nbrCar) {
             printf(" %s", "   ---  ");
             printf(" %s\e[0m\n", "   ---  ");
             continue;
+        }else {
+            int numero = voiture->numero;
+            printf("   %2d   ", numero);
+
+            float S1 = voiture->timeS1;
+            couleur(voiture->posS1);
+            printPerso(" %8.3f", S1);
+            printf("\e[0m");
+
+            float S2 = voiture->timeS2;
+            couleur(voiture->posS2);
+            printPerso(" %8.3f", S2);
+            printf("\e[0m");
+
+            float S3 = voiture->timeS3;
+            couleur(voiture->posS3);
+            printPerso(" %8.3f", S3);
+            printf("\e[0m");
+
+            float bestTourTime = voiture->bestTourTime;
+            printPerso(" %9.3f", bestTourTime);
+
+            float gap = voiture->gap;
+            printPerso(" %+8.3f\e[0m", gap);
+
+            if (voiture->stand) {
+                printf("     %d", voiture->stand);
+            } else {
+                printf(" %s", "   ---  ");
+            }
+
+            printf("\n");
         }
-        int numero = voiture->numero;
-        printf("   %2d   ", numero);
-
-        float S1 = voiture->timeS1;
-        couleur(voiture->posS1);
-        printPerso(" %8.3f", S1);
-        printf("\e[0m");
-
-        float S2 = voiture->timeS2;
-        couleur(voiture->posS2);
-        printPerso(" %8.3f", S2);
-        printf("\e[0m");
-
-        float S3 = voiture->timeS3;
-        couleur(voiture->posS3);
-        printPerso(" %8.3f", S3);
-        printf("\e[0m");
-
-        float bestTourTime = voiture->bestTourTime;
-        printPerso(" %9.3f", bestTourTime);
-
-        float gap = voiture->gap;
-        printPerso(" %+8.3f\e[0m", gap);
-
-        if (voiture->stand) {
-            printf("     %d", voiture->stand);
-        } else {
-            printf(" %s", "   ---  ");
-        }
-
-        printf("\n");
-
-
     }
     descr_couleur();
 }
@@ -152,7 +151,7 @@ void affichage_final(car *tableau, int taille, char *title, int nbrCar) {
     for (int i = 0; i < taille; i++){
         car *voiture = &tableau[i];
         int actif = (i<nbrCar);
-        if (!actif){
+        if (!actif || voiture->out){
             printf("\e[38;5;0m\e[48;5;254m");
             printf("   %2d   ", voiture->numero);
             printf(" %8.3f", voiture->timeS1);
@@ -164,7 +163,10 @@ void affichage_final(car *tableau, int taille, char *title, int nbrCar) {
             printf(" %s", "   ---  ");
             printf(" %s\e[0m\n", "   ---  ");
             continue;
-        }
+        }else {
         aff_voiture_final(voiture);
+
+        }
     }
+    descr_couleur();
 }

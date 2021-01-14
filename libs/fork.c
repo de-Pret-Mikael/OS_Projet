@@ -22,7 +22,7 @@ void creatFork(SharedInfo shared, int index, int maxTime) {
         if (!getVoitureCopy(shared, index, &voiture)) {
             exit(0);
         }
-        while (voiture.totalTime< maxTime) {
+        while (voiture.totalTime < maxTime && !voiture.out) {
             update_time(&voiture);
             if (!setVoiture(shared, index, &voiture)) {
                 exit(0);
@@ -47,10 +47,10 @@ void finaleFork(SharedInfo shared, int index, int maxTour) {
     if (PID == 0) {
         srand48(time(NULL) + getpid());
         car voiture;
-        if(!getVoitureCopy(shared, index, &voiture)) {
+        if (!getVoitureCopy(shared, index, &voiture)) {
             exit(0);
         }
-        while (voiture.nbrTour < maxTour) {
+        while (voiture.nbrTour < maxTour && !voiture.out) {
             update_time(&voiture);
             voiture.nbrTour += 1;
             if (!setVoiture(shared, index, &voiture)) {

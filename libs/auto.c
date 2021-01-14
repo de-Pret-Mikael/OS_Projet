@@ -17,38 +17,39 @@
 int NBR_CAR = 20;
 int ID_CAR[20] = {
         44, 77, 16, 5, 33, 23, 55, 4, 3, 31, 10, 26, 11, 18, 7, 99, 20, 8, 63, 6};
-int tour = 1;
-float minTemps;
-float bestTimeS1;
-car typeTri;
 
 
 void update_time(car *voiture) {
-    int min = 25;
-    int max = 45;
-    voiture->timeS1 = randomRange(min, max);
-    if (voiture->timeS1 < voiture->bestTimeS1) {
-        voiture->bestTimeS1 = voiture->timeS1;
+    if (!voiture->out) {
+        int min = 25;
+        int max = 45;
+        voiture->timeS1 = randomRange(min, max);
+        if (voiture->timeS1 < voiture->bestTimeS1) {
+            voiture->bestTimeS1 = voiture->timeS1;
+        }
+        voiture->timeS2 = randomRange(min, max);
+        if (voiture->timeS2 < voiture->bestTimeS2) {
+            voiture->bestTimeS2 = voiture->timeS2;
+        }
+        voiture->timeS3 = randomRange(min, max);
+        if (voiture->timeS3 < voiture->bestTimeS3) {
+            voiture->bestTimeS3 = voiture->timeS3;
+        }
+        voiture->tourTime = voiture->timeS1 + voiture->timeS2 + voiture->timeS3;
+        if (voiture->tourTime < voiture->bestTourTime) {
+            voiture->bestTourTime = voiture->tourTime;
+        }
+        voiture->totalTime += voiture->tourTime;
+        double stand = randomRange(0, 100);
+        if (stand < 5) {
+            voiture->stand = 10;
+            voiture->totalTime += 10;
+        }
+        double out = randomRange(0, 100);
+        if (out < 2) {
+            voiture->out = 1;
+        }
     }
-    voiture->timeS2 = randomRange(min, max);
-    if (voiture->timeS2 < voiture->bestTimeS2) {
-        voiture->bestTimeS2 = voiture->timeS2;
-    }
-    voiture->timeS3 = randomRange(min, max);
-    if (voiture->timeS3 < voiture->bestTimeS3) {
-        voiture->bestTimeS3 = voiture->timeS3;
-    }
-    voiture->tourTime = voiture->timeS1 + voiture->timeS2 + voiture->timeS3;
-    if (voiture->tourTime < voiture->bestTourTime) {
-        voiture->bestTourTime = voiture->tourTime;
-    }
-    voiture->totalTime += voiture->tourTime;
-    double stand = randomRange(0, 100);
-    if (stand < 5) {
-        voiture->stand = 10;
-        voiture->totalTime += 10;
-    }
-
 }
 
 
@@ -76,10 +77,12 @@ void tri_S1(car *table, car *tableTriAll, int nbrCar) {
     }
     for (int i = 0; i < nbrCar; i++) {
         for (int j = 0; j < nbrCar; j++) {
-            if (tableTri[j]->timeS1 > tableTri[i]->timeS1) {
-                car *emplacement_temporaire = tableTri[i];
-                tableTri[i] = tableTri[j];
-                tableTri[j] = emplacement_temporaire;
+            if (!tableTri[i]->out) {
+                if (tableTri[j]->timeS1 > tableTri[i]->timeS1) {
+                    car *emplacement_temporaire = tableTri[i];
+                    tableTri[i] = tableTri[j];
+                    tableTri[j] = emplacement_temporaire;
+                }
             }
         }
     }
@@ -96,10 +99,12 @@ void tri_S2(car *table, car *tableTriAll, int nbrCar) {
     }
     for (int i = 0; i < nbrCar; i++) {
         for (int j = 0; j < nbrCar; j++) {
-            if (tableTri[j]->timeS2 > tableTri[i]->timeS2) {
-                car *emplacement_temporaire = tableTri[i];
-                tableTri[i] = tableTri[j];
-                tableTri[j] = emplacement_temporaire;
+            if (!tableTri[i]->out) {
+                if (tableTri[j]->timeS2 > tableTri[i]->timeS2) {
+                    car *emplacement_temporaire = tableTri[i];
+                    tableTri[i] = tableTri[j];
+                    tableTri[j] = emplacement_temporaire;
+                }
             }
         }
     }
@@ -116,10 +121,12 @@ void tri_S3(car *table, car *tableTriAll, int nbrCar) {
     }
     for (int i = 0; i < nbrCar; i++) {
         for (int j = 0; j < nbrCar; j++) {
-            if (tableTri[j]->timeS3 > tableTri[i]->timeS3) {
-                car *emplacement_temporaire = tableTri[i];
-                tableTri[i] = tableTri[j];
-                tableTri[j] = emplacement_temporaire;
+            if (!tableTri[i]->out){
+                if (tableTri[j]->timeS3 > tableTri[i]->timeS3) {
+                    car *emplacement_temporaire = tableTri[i];
+                    tableTri[i] = tableTri[j];
+                    tableTri[j] = emplacement_temporaire;
+                }
             }
         }
     }
@@ -136,10 +143,12 @@ void tri_temps_tour(car *table, car *tableTriAll, int nbrCar) {
     }
     for (int i = 0; i < nbrCar; i++) {
         for (int j = 0; j < nbrCar; j++) {
-            if (tableTri[j]->tourTime > tableTri[i]->tourTime) {
-                car *emplacement_temporaire = tableTri[i];
-                tableTri[i] = tableTri[j];
-                tableTri[j] = emplacement_temporaire;
+            if (!tableTri[i]->out) {
+                if (tableTri[j]->tourTime > tableTri[i]->tourTime) {
+                    car *emplacement_temporaire = tableTri[i];
+                    tableTri[i] = tableTri[j];
+                    tableTri[j] = emplacement_temporaire;
+                }
             }
         }
     }
@@ -156,19 +165,19 @@ void tri_final(car *tableTri, car *table, int nbrCar) {
     for (int i = 0; i < nbrCar; i++) {
         for (int j = 0; j < nbrCar; j++) {
             if (tableTri[j].nbrTour < tableTri[i].nbrTour) {
+                if (tableTri[j].totalTime < tableTri[i].totalTime) {
+                    car emplacement_temporaire = tableTri[i];
+                    tableTri[i] = tableTri[j];
+                    tableTri[j] = emplacement_temporaire;
+                }
+            } else if (tableTri[j].nbrTour == tableTri[i].nbrTour) {
                 if (tableTri[j].totalTime > tableTri[i].totalTime) {
                     car emplacement_temporaire = tableTri[i];
                     tableTri[i] = tableTri[j];
                     tableTri[j] = emplacement_temporaire;
                 }
             }
-            else if (tableTri[j].nbrTour == tableTri[i].nbrTour) {
-                if (tableTri[j].totalTime > tableTri[i].totalTime) {
-                    car emplacement_temporaire = tableTri[i];
-                    tableTri[i] = tableTri[j];
-                    tableTri[j] = emplacement_temporaire;
-                }
-            }
+
         }
     }
 }
@@ -188,7 +197,7 @@ void diff_best_time(car *tableauVoiture) {
 void diff_total_time(car *tableauVoiture) {
     float gap;
     for (int i = 0; i < NBR_CAR; i++) {
-        if (i != 0){
+        if (i != 0) {
             gap = tableauVoiture[i].totalTime - tableauVoiture[i - 1].totalTime;
             tableauVoiture[i].gap = gap;
         } else {
@@ -213,6 +222,7 @@ int initVoiture(SharedInfo shared) {
         voiture[i].totalTime = 0;
         voiture[i].finish = 0;
         voiture[i].stand = 0;
+        voiture[i].out = 0;
         voiture[i].nbrTour = 0;
     }
     if (!detVoiture(voiture, 0)) {
@@ -236,6 +246,7 @@ int resetVoiture(SharedInfo shared, int nbrCar, car *tableTri) {
         voiture[index].totalTime = 0;
         voiture[index].nbrTour = 0;
         voiture[index].finish = 0;
+        voiture[index].out = 0;
         voiture[index].stand = 0;
     }
     if (!detVoiture(voiture, 0)) {
@@ -321,12 +332,12 @@ int main(int argc, char **argv) {
     if (!getAllVoitureCopy(shared, tableVoitureTri)) {
         return 0;
     }
-    lancerEssai(shared, tableVoitureTri, NBR_CAR, 360, "P1");
-    lancerEssai(shared, tableVoitureTri, NBR_CAR, 360, "P2");
-    lancerEssai(shared, tableVoitureTri, NBR_CAR, 360, "P3");
+    //lancerEssai(shared, tableVoitureTri, NBR_CAR, 360, "P1");
+    //lancerEssai(shared, tableVoitureTri, NBR_CAR, 360, "P2");
+    //lancerEssai(shared, tableVoitureTri, NBR_CAR, 360, "P3");
     lancerEssai(shared, tableVoitureTri, NBR_CAR, 360, "Q1");
     lancerEssai(shared, tableVoitureTri, 15, 360, "Q2");
     lancerEssai(shared, tableVoitureTri, 10, 360, "Q3");
-    lancerFinal(shared, tableVoitureTri, 10, 20,"FINAL");
+    lancerFinal(shared, tableVoitureTri, 10, 20, "FINAL");
     delAllVoiture(&shared);
 }
